@@ -1,7 +1,7 @@
 import express from "express";
 import config from "../config/index.js";
 import GoogleSheet from "../googleSheet/GoogleSheet.js";
-import { GoogleSpreadsheet } from "google-spreadsheet";
+import GoogleSpreadsheet from "google-spreadsheet";
 import { authenticateUser } from "../middleware/auth.js";
 
 const router = express.Router();
