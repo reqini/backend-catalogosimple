@@ -10,7 +10,7 @@ import { createServer } from "http";
 import morgan from "morgan";
 import helmet from "helmet";
 import cors from "cors";
-import config from "./config"; // Aquí importamos config
+import config from "./config/index.js"; // Aquí importamos config
 import { notFound, errorHandler } from "./middleware/middlewares";
 import routes from "./routes";
 

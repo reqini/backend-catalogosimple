@@ -1,6 +1,6 @@
 import express from "express";
-import config from "../../config";
-import GoogleSheet from "../../googleSheet/GoogleSheet";
+import config from "../../config/index.js";
+import GoogleSheet from "../../googleSheet/GoogleSheet.js";
 import { google } from "googleapis";
 import { authenticateUser } from "../../middleware/auth.js";
 
@@ -45,7 +45,7 @@ router.get("/data", async (req, res) => {
 // Agregar venta
 router.post("/", async (req, res) => {
   const { descripcion, puntos, banco, valor_comisionable, cuotas, fecha } = req.body;
-  const username = req.user.username?.trim().toLowerCase();
+  const username = req.user.username && req.user.username.trim().toLowerCase();
 
   if (
     !username ||
@@ -84,7 +84,7 @@ router.post("/", async (req, res) => {
 
     res.json({ success: true, message: "Venta guardada correctamente" });
   } catch (error) {
-    console.error("❌ Error al guardar venta:", error?.response?.data || error.message);
+    console.error("❌ Error al guardar venta:", (error && error.response && error.response.data) || error.message);
     res.status(500).json({ success: false, message: "Error al guardar venta" });
   }
 });
@@ -104,7 +104,7 @@ router.get("/", async (req, res) => {
     const ventas = rows
       .slice(1)
       .filter((row) => 
-        row[0]?.trim().toLowerCase() === username &&
+        row[0] && row[0].trim().toLowerCase() === username &&
         (row[7] || "").toLowerCase() === "sí" // Columna H: "activo"
       )
       .map((row) => ({
@@ -139,8 +139,8 @@ router.patch("/cerrar-mes", async (req, res) => {
     const updates = [];
 
     rows.forEach((row, index) => {
-      const usuario = row[0]?.trim().toLowerCase();
-      const activo = row[7]?.toLowerCase();
+      const usuario = row[0] && row[0].trim().toLowerCase();
+      const activo = row[7] && row[7].toLowerCase();
       if (index !== 0 && usuario === username && activo === "sí") {
         const rowIndex = index + 1; // porque la hoja empieza en 1 y tiene encabezado
         updates.push({
@@ -182,7 +182,7 @@ router.get("/ventas-anteriores", async (req, res) => {
     const ventasAnteriores = rows
       .slice(1)
       .filter((row) =>
-        row[0]?.trim().toLowerCase() === username &&
+        row[0] && row[0].trim().toLowerCase() === username &&
         (row[7] || "").toLowerCase() === "no"
       )
       .map((row) => ({

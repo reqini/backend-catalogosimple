@@ -1,6 +1,6 @@
 import express from "express";
-import config from "../../config";
-import GoogleSheet from "../../googleSheet/GoogleSheet";
+import config from "../../config/index.js";
+import GoogleSheet from "../../googleSheet/GoogleSheet.js";
 import { google } from "googleapis";
 import { authenticateUser } from "../../middleware/auth.js";
 
@@ -52,7 +52,7 @@ router.get("/", async (req, res) => {
 
     const clientes = rows
       .slice(1)
-      .filter((row) => row[0]?.trim().toLowerCase() === usuario)
+      .filter((row) => row[0] && row[0].trim().toLowerCase() === usuario)
       .map((row) => ({
         username: row[0],
         nombre: row[1],
@@ -89,7 +89,7 @@ router.delete("/", async (req, res) => {
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
       if (
-        row[0]?.trim().toLowerCase() === usuario &&
+        row[0] && row[0].trim().toLowerCase() === usuario &&
         row[1] === nombre_del_cliente &&
         row[2] === direccion &&
         row[3] === banco &&
@@ -168,7 +168,7 @@ router.put("/", async (req, res) => {
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
       if (
-        row[0]?.trim().toLowerCase() === usuario &&
+        row[0] && row[0].trim().toLowerCase() === usuario &&
         row[1] === nombre &&
         row[2] === direccion &&
         row[3] === banco &&

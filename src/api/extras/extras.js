@@ -1,6 +1,6 @@
 import express from "express"
 
-import config from "../../config";
+import config from "../../config/index.js";
 import GoogleSheet from "../../googleSheet/GoogleSheet.js";
 
 const router = express.Router()

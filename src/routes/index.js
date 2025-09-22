@@ -1,6 +1,6 @@
 import express from "express";
 
-import api from "../api";
+import api from "../api/index.js";
 import login from "../login/login.js";
 import { authenticateUser } from "../middleware/auth.js";
 

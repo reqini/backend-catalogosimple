@@ -21,7 +21,7 @@ class GoogleSheet {
     return this;
   }
 
-  getData = async (range) => {
+  async getData(range) {
     try {
       const response = await this.googleSheets.spreadsheets.values.get({
         spreadsheetId: this.spreadsheetId,
@@ -48,9 +48,9 @@ class GoogleSheet {
       console.error("Error al leer datos de Google Sheets:", error.message); // Mensaje genérico
       throw new Error("No se pudo leer el contenido de Google Sheets.");
     }
-  };
+  }
 
-  addData = async (sheetName, newData) => {
+  async addData(sheetName, newData) {
     try {
       // Convertir el objeto a un array de valores
       // Asumiendo que newData es un objeto con propiedades que coinciden con las columnas
@@ -84,9 +84,9 @@ class GoogleSheet {
       console.error(`Error al agregar datos a ${sheetName}:`, error.message);
       throw new Error(`No se pudo agregar el contenido a Google Sheets: ${error.message}`);
     }
-  };
+  }
 
-  updateData = async (sheetName, range, values) => {
+  async updateData(sheetName, range, values) {
     try {
       await this.googleSheets.spreadsheets.values.update({
         spreadsheetId: this.spreadsheetId,
@@ -101,7 +101,7 @@ class GoogleSheet {
       console.error(`Error al actualizar datos en ${sheetName}:`, error.message);
       throw new Error(`No se pudo actualizar el contenido en Google Sheets: ${error.message}`);
     }
-  };
+  }
 }
 
 export default GoogleSheet;
