@@ -1498,6 +1498,11 @@ es-to-primitive@^1.2.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
+es-toolkit@^1.39.8:
+  version "1.39.10"
+  resolved "https://registry.yarnpkg.com/es-toolkit/-/es-toolkit-1.39.10.tgz#513407af73e79f9940e7ec7650f2e6dceeaf1d81"
+  integrity sha512-E0iGnTtbDhkeczB0T+mxmoVlT4YNweEKBLq7oaU4p11mecdsZpNWOglI4895Vh4usbQ+LsJiuLuI2L0Vdmfm2w==
+
 escalade@^3.1.1:
   version "3.1.1"
   resolved "https://registry.npmjs.org/escalade/-/escalade-3.1.1.tgz"
@@ -1736,6 +1741,14 @@ google-auth-library@^9.0.0, google-auth-library@^9.14.2:
     gcp-metadata "^6.1.0"
     gtoken "^7.0.0"
     jws "^4.0.0"
+
+google-spreadsheet@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/google-spreadsheet/-/google-spreadsheet-5.0.2.tgz#731f68bf17d4a55674ef3721b8e4f5ad0982b70f"
+  integrity sha512-8ugGYGsy6BLl6d4z2zwllEv8hFB2IVcCNAUYT/seo4DU7Pk6m79qv+qRxE2cE8bxbf4S13T5fzrjcPhbk2ogsw==
+  dependencies:
+    es-toolkit "^1.39.8"
+    ky "^1.8.2"
 
 googleapis-common@^7.0.0:
   version "7.0.1"
@@ -2108,6 +2121,11 @@ kind-of@^6.0.2:
   version "6.0.3"
   resolved "https://registry.npmjs.org/kind-of/-/kind-of-6.0.3.tgz"
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
+
+ky@^1.8.2:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/ky/-/ky-1.10.0.tgz#d3b9dc24d723a28cfd0a3254f177d28faa5f961e"
+  integrity sha512-YRPCzHEWZffbfvmRrfwa+5nwBHwZuYiTrfDX0wuhGBPV0pA/zCqcOq93MDssON/baIkpYbvehIX5aLpMxrRhaA==
 
 locate-path@^3.0.0:
   version "3.0.0"

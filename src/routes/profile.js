@@ -1,6 +1,7 @@
 import express from "express";
 import config from "../config/index.js";
 import GoogleSheet from "../googleSheet/GoogleSheet.js";
+import { GoogleSpreadsheet } from "google-spreadsheet";
 import { authenticateUser } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -89,75 +90,76 @@ router.get("/:username", authenticateUser, verifyOwnership, async (req, res) => 
 });
 
 // 2. PUT /api/profile/:username - Actualizar datos del perfil
-router.put("/:username", authenticateUser, verifyOwnership, async (req, res) => {
+router.put("/:username", authenticateUser, async (req, res) => {
   try {
     const { username } = req.params;
-    const updates = req.body;
-
-    // Verificar que el usuario existe
-    const userData = await findUserRow("Perfiles_Emprendedoras", username);
-    if (!userData) {
-      return res.status(404).json({
-        success: false,
-        message: "Usuario no encontrado"
+    const updateData = req.body;
+    
+    console.log('Actualizando perfil para:', username);
+    console.log('Datos recibidos:', updateData);
+    
+    // Verificar permisos
+    if (req.user.username !== username) {
+      return res.status(403).json({ 
+        success: false, 
+        message: 'No tienes permisos para actualizar este perfil' 
       });
     }
-
-    // Obtener índice de la fila
-    const rowIndex = await getUserRowIndex("Perfiles_Emprendedoras", username);
-
-    // Preparar actualizaciones
-    const updatesToApply = [];
-    const columns = {
-      email: 'B',
-      phone: 'C',
-      address: 'D',
-      businessName: 'E',
-      businessType: 'F',
-      avatar: 'G',
-      notifications: 'N',
-      darkMode: 'O',
-      language: 'P',
-      theme: 'Q'
-    };
-
-    // Procesar actualizaciones directas
-    for (const [field, column] of Object.entries(columns)) {
-      if (updates[field] !== undefined) {
-        updatesToApply.push({
-          range: `Perfiles_Emprendedoras!${column}${rowIndex}`,
-          values: [[String(updates[field])]]
-        });
-      }
+    
+    // Conectar con Google Sheets
+    const doc = new GoogleSpreadsheet(config.GOOGLE_SHEET_ID);
+    await doc.useServiceAccountAuth({
+      client_email: config.GOOGLE_CREDENTIALS.client_email,
+      private_key: config.GOOGLE_CREDENTIALS.private_key,
+    });
+    await doc.loadInfo();
+    
+    const sheet = doc.sheetsByTitle['Perfiles_Emprendedoras'];
+    const rows = await sheet.getRows();
+    
+    // Buscar usuario
+    const userRow = rows.find(row => row.username === username);
+    
+    if (!userRow) {
+      return res.status(404).json({
+        success: false,
+        message: 'Usuario no encontrado'
+      });
     }
-
-    // Procesar preferencias anidadas
-    if (updates.preferences) {
-      for (const [pref, value] of Object.entries(updates.preferences)) {
-        if (columns[pref]) {
-          updatesToApply.push({
-            range: `Perfiles_Emprendedoras!${columns[pref]}${rowIndex}`,
-            values: [[String(value)]]
-          });
+    
+    // Actualizar datos (solo los campos que vienen en el body)
+    Object.keys(updateData).forEach(key => {
+      if (key !== 'preferences' && updateData[key] !== undefined) {
+        userRow[key] = updateData[key];
+        console.log(`Actualizando ${key}: ${updateData[key]}`);
+      }
+    });
+    
+    // Actualizar preferencias si vienen
+    if (updateData.preferences) {
+      Object.keys(updateData.preferences).forEach(pref => {
+        if (updateData.preferences[pref] !== undefined) {
+          userRow[pref] = updateData.preferences[pref].toString();
+          console.log(`Actualizando preferencia ${pref}: ${updateData.preferences[pref]}`);
         }
-      }
+      });
     }
-
-    // Aplicar actualizaciones
-    if (updatesToApply.length > 0) {
-      await googleSheet.updateData("Perfiles_Emprendedoras", "", updatesToApply);
-    }
-
+    
+    // Guardar cambios
+    await userRow.save();
+    console.log('Perfil actualizado exitosamente');
+    
     res.json({
       success: true,
-      message: "Perfil actualizado exitosamente"
+      message: 'Perfil actualizado exitosamente'
     });
-
+    
   } catch (error) {
-    console.error("Error al actualizar perfil:", error.message);
+    console.error('Error al actualizar perfil:', error);
+    console.error('Stack trace:', error.stack);
     res.status(500).json({
       success: false,
-      message: "Error interno del servidor"
+      message: 'Error interno del servidor: ' + error.message
     });
   }
 });
