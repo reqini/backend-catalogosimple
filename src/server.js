@@ -11,8 +11,8 @@ import morgan from "morgan";
 import helmet from "helmet";
 import cors from "cors";
 import config from "./config/index.js"; // Aquí importamos config
-import { notFound, errorHandler } from "./middleware/middlewares";
-import routes from "./routes";
+import { notFound, errorHandler } from "./middleware/middlewares.js";
+import routes from "./routes/index.js";
 
 const getServer = async () => {
   const app = express();
