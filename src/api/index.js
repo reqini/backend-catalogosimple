@@ -1,10 +1,10 @@
 import express from "express";
 
-import admin from "./admin/admin.js"
-import user from "./user/user.js"
-import clientes from "./clientes/clientes.js"
-import productos from "./productos/index.js"
-import bancos from "./bancos/index.js"
+import admin from "./admin/admin.js";
+import user from "./user/user.js";
+import clientes from "./clientes/clientes.js";
+import productos from "./productos/index.js";
+import bancos from "./bancos/index.js";
 import ventas from "./ventas/ventas.js";
 
 const router = express.Router();
