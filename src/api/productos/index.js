@@ -10,7 +10,7 @@ const googleSheet = new GoogleSheet(config.GOOGLE_CREDENTIALS, config.GOOGLE_SHE
 // Ruta para obtener productos
 router.get("/", async (_req, res) => {
   try {
-    const productos = await googleSheet.getData("productos");
+    const productos = await googleSheet.getData("A:AE");
 
     res.json(productos);
 

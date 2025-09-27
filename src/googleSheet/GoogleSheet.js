@@ -23,6 +23,9 @@ class GoogleSheet {
 
   async getData(range) {
     try {
+      // Asegurar que la inicialización esté completa
+      await this._initPromise;
+      
       const response = await this.googleSheets.spreadsheets.values.get({
         spreadsheetId: this.spreadsheetId,
         range,
@@ -52,6 +55,9 @@ class GoogleSheet {
 
   async addData(sheetName, newData) {
     try {
+      // Asegurar que la inicialización esté completa
+      await this._initPromise;
+      
       // Convertir el objeto a un array de valores
       // Asumiendo que newData es un objeto con propiedades que coinciden con las columnas
       // Primero obtenemos los encabezados para saber el orden correcto
@@ -88,6 +94,9 @@ class GoogleSheet {
 
   async updateData(sheetName, range, values) {
     try {
+      // Asegurar que la inicialización esté completa
+      await this._initPromise;
+      
       await this.googleSheets.spreadsheets.values.update({
         spreadsheetId: this.spreadsheetId,
         range: `${sheetName}!${range}`,
