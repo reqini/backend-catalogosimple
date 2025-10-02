@@ -1,0 +1,184 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Modelo para Productos (basado en la hoja de productos del Google Sheet)
+model Product {
+  id                      Int      @id @default(autoincrement())
+  combo                   Int      @unique // Combo number
+  familia                 String?  // B, C
+  linea                   String?  // D
+  codigo                  String?  // E
+  descripcion             String?  // F
+  puntos                  String?  // G
+  precio_preferencial     String?  // H
+  precio_negocio          String?  // I
+  precio_emprendedor_no_categorizado String? // J
+  precio_emprendedor_categorizado_y_tdf String? // K
+  precio_emprendedor_sin_iva String? // L
+  psvp_lista              String?  // M
+  veinticuatro_sin_interes String? // N
+  veinte_sin_interes      String?  // O
+  dieciocho_sin_interes   String?  // P
+  quince_sin_interes      String?  // Q
+  catorce_sin_interes     String?  // R
+  doce_sin_interes        String?  // S
+  diez_sin_interes        String?  // T
+  nueve_sin_interes       String?  // U
+  seis_sin_interes        String?  // V
+  tres_sin_interes        String?  // W
+  por_comisionable        String?  // X
+  vigencia                String?  // Y
+  tres_con_interes        String?  // Z
+  seis_con_interes        String?  // AA
+  valor_comisionable      String?  // AB
+  imagen                  String?  // AC
+  ficha_tecnica           String?  // AD
+  discount                String?  // AE
+  event                   String?  // AF
+  
+  // Relaciones
+  saleItems               SaleItem[]
+  
+  // Timestamps
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  
+  @@map("products")
+}
+
+// Modelo para Usuarios
+model User {
+  id                      Int      @id @default(autoincrement())
+  username                String   @unique
+  password                String
+  email                   String?
+  nombre                  String?
+  apellido                String?
+  rango                   String?
+  codigo_emprendedora     String?
+  tipo_usuario            String?  // gratis, full, limitado
+  estado                  String?  // Activo, Inactivo
+  telefono                String?
+  direccion               String?
+  fecha_registro          DateTime @default(now())
+  ultimo_acceso           DateTime?
+  
+  // Relaciones
+  ventas                  Sale[]
+  clientes                Client[]
+  
+  // Timestamps
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  
+  @@map("users")
+}
+
+// Modelo para Clientes
+model Client {
+  id                      Int      @id @default(autoincrement())
+  nombre                  String
+  apellido                String?
+  email                   String?
+  telefono                String?
+  direccion               String?
+  documento               String?
+  tipo_documento          String?
+  fecha_nacimiento        DateTime?
+  notas                   String?
+  activo                  Boolean  @default(true)
+  
+  // Relaciones
+  userId                  Int
+  user                    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ventas                  Sale[]
+  
+  // Timestamps
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  
+  @@map("clients")
+}
+
+// Modelo para Ventas
+model Sale {
+  id                      Int      @id @default(autoincrement())
+  fecha_venta             DateTime @default(now())
+  total                   Decimal
+  comision                Decimal?
+  estado                  String   @default("pendiente") // pendiente, completada, cancelada
+  metodo_pago             String?
+  notas                   String?
+  
+  // Relaciones
+  userId                  Int
+  user                    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clientId                Int?
+  client                  Client?  @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  items                   SaleItem[]
+  
+  // Timestamps
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  
+  @@map("sales")
+}
+
+// Modelo para Items de Venta
+model SaleItem {
+  id                      Int      @id @default(autoincrement())
+  cantidad                Int      @default(1)
+  precio_unitario         Decimal
+  subtotal                Decimal
+  descuento               Decimal? @default(0)
+  
+  // Relaciones
+  saleId                  Int
+  sale                    Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  productId               Int?
+  product                 Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  
+  // Timestamps
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  
+  @@map("sale_items")
+}
+
+// Modelo para Bancos
+model Bank {
+  id                      Int      @id @default(autoincrement())
+  nombre                  String
+  codigo                  String?
+  activo                  Boolean  @default(true)
+  
+  // Timestamps
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  
+  @@map("banks")
+}
+
+// Modelo para Configuraciones del Sistema
+model SystemConfig {
+  id                      Int      @id @default(autoincrement())
+  clave                   String   @unique
+  valor                   String
+  descripcion             String?
+  tipo                    String?  // string, number, boolean, json
+  
+  // Timestamps
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  
+  @@map("system_configs")
+}
