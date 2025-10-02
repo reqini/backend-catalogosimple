@@ -61,6 +61,39 @@ router.post("/update-password", async (req, res) => {
   }
 });
 
+// Ruta para agregar usuario de prueba
+router.post("/test-add-user", async (req, res) => {
+  try {
+    const timestamp = new Date().toISOString();
+    const testUser = [
+      `test_user_${Date.now()}`,
+      "test@ejemplo.com", 
+      "123456",
+      "Test User",
+      "Test Apellido",
+      "Activo",
+      timestamp
+    ];
+    
+    console.log("🧪 Agregando usuario de prueba:", testUser);
+    
+    // Agregar usuario a la hoja "usuarios"
+    await googleSheet.addData("usuarios", testUser);
+    
+    res.json({ 
+      success: true, 
+      message: "Usuario de prueba agregado exitosamente",
+      user: testUser[0]
+    });
+  } catch (error) {
+    console.error("Error al agregar usuario de prueba:", error.message);
+    res.status(500).json({ 
+      success: false, 
+      message: "Error al agregar usuario de prueba: " + error.message
+    });
+  }
+});
+
 // Ruta para eliminar usuario de Google Sheets
 router.post("/delete-account", async (req, res) => {
   const { username } = req.body;
