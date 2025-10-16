@@ -47,7 +47,7 @@ async function getEssenProducts() {
       pricing_info: {
         has_pricing: true,
         message: "Los precios y cuotas están disponibles para usuarios registrados",
-        contact_message: "Contacte con nosotros para obtener precios y opciones de pago"
+        contact_message: "Contacte por WhatsApp al 11 5793-5007 para obtener precios y opciones de pago"
       }
     })).filter(product => product.combo); // Solo productos con combo válido
     
@@ -373,8 +373,8 @@ router.get("/search", async (req, res) => {
         vigencia
       },
       pricing_info: {
-        message: "Para consultas de precios, contacte con nosotros",
-        contact: "Los precios y cuotas están disponibles para usuarios registrados"
+        message: "Para consultas de precios, contacte por WhatsApp",
+        contact: "WhatsApp: 11 5793-5007 - Los precios y cuotas están disponibles para usuarios registrados"
       }
     });
   } catch (error) {
@@ -397,7 +397,7 @@ router.get("/", (req, res) => {
     pricing_policy: {
       message: "Los precios y cuotas NO están disponibles en la API pública",
       reason: "Los precios están reservados para usuarios registrados y pagos",
-      contact: "Para obtener precios, contacte con nosotros directamente"
+      contact: "Para obtener precios, contacte por WhatsApp al 11 5793-5007"
     },
     endpoints: {
       products: {
@@ -460,7 +460,7 @@ router.get("/", (req, res) => {
     cache: "Los datos se cachean por 5 minutos para optimizar performance",
     source: "https://github.com/reqini/backend-catalogosimple",
     license: "MIT",
-    contact: "Para precios y cuotas, contacte directamente con el equipo comercial"
+    contact: "Para precios y cuotas, contacte por WhatsApp al 11 5793-5007"
   });
 });
 

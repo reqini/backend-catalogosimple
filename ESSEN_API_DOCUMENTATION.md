@@ -340,9 +340,7 @@ curl "https://backend-catalogosimple.onrender.com/api/essen/categories"
 
 Para obtener información de precios y cuotas:
 
-📧 **Email**: [contacto@essen.com](mailto:contacto@essen.com)
-📱 **WhatsApp**: [Número de contacto]
-🌐 **Web**: [Sitio web oficial]
+📱 **WhatsApp**: [11 5793-5007](https://wa.me/541157935007)
 
 ---
 
