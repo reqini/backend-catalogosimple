@@ -58,6 +58,11 @@ const getServer = async () => {
     res.sendFile('index.html', { root: 'public' });
   });
 
+  // Ruta para la vista previa
+  app.get('/preview.html', (req, res) => {
+    res.sendFile('preview.html', { root: 'public' });
+  });
+
   app.use(routes);
 
   app.use(notFound);
