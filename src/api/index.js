@@ -15,6 +15,9 @@ import sales from "./sales/sales.js";
 import clients from "./clients/clients.js";
 import dashboard from "./dashboard/dashboard.js";
 
+// API Pública Essen
+import essen from "./essen/essen.js";
+
 const router = express.Router();
 
 // Rutas legacy (Google Sheets) - Mantener compatibilidad
@@ -31,5 +34,8 @@ router.use("/users", users)
 router.use("/sales", sales)
 router.use("/clients", clients)
 router.use("/dashboard", dashboard)
+
+// API Pública Essen (sin precios)
+router.use("/essen", essen)
 
 export default router;
