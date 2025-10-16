@@ -50,6 +50,14 @@ const getServer = async () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+  // Servir archivos estáticos desde la carpeta public
+  app.use(express.static('public'));
+
+  // Ruta principal - servir la landing page
+  app.get('/', (req, res) => {
+    res.sendFile('index.html', { root: 'public' });
+  });
+
   app.use(routes);
 
   app.use(notFound);
